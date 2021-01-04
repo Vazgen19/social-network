@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html >
     <head>
-        <!-- <script src="/js/app.js'"></script> -->
+	    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+	    <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
     <body>
         <div id = "root1" class="container">
