@@ -16,6 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('/sign-in', 'UserController@signIn')->name('login');
 Route::post('/sign-up', 'UserController@signUp')->name('register');
 
-// Route::middleware('auth:api')->group(function() {
-// 	Route::get('/user/{id}', 'UserController@userDetail')->name('user.detail');
-// });
+Route::middleware('auth:api')->group(function() {
+	Route::get('/home', 'UserController@userDetail')->name('user.detail');
+});
