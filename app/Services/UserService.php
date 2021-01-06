@@ -9,6 +9,12 @@ use App\Models\User;
 class UserService
 {
 	private $status_code    =        200;
+	private $friends_statuses = [
+	  'approved' => 0,
+	  'pending' => 1,
+	  'rejected' => 2
+	];
+	
 
 	public function signIn($requestData) {
 
@@ -91,6 +97,25 @@ class UserService
         	'message' => 'Profile updated Successfully',
         	'user' => $user,
 		];
+	}
+
+	public function friendsList() {
+		  $user = Auth::user();
+		  return [
+			'status' => $this->status_code,
+			'friends'=> $user->friends
+		  ];
+	}
+
+	public function unfriend($requestData) {
+		$user = Auth::user();
+		$user->friends()->detach($requestData->id);
+
+		return [
+			'status' => $this->status_code,
+			'friends'=> $user->friends
+		  ];
+
 	}
 }
 

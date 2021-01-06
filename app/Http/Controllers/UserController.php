@@ -63,4 +63,12 @@ class UserController extends Controller
         return response()->json($userService->updateProfile($request));
     }
 
+    public function friendsList(Userservice $userService) {
+        return response()->json($userService->friendsList());
+    }
+
+    public function unfriend(UserService $userService, Request $request) {    
+        return response()->json($userService->unfriend($request));
+    }
+
 }

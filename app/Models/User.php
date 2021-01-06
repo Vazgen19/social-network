@@ -46,6 +46,6 @@ class User extends Authenticatable
 
     public function friends()
     {
-        return $this->belongsToMany(self::class, 'friends', 'sender_id', 'receiver_id');
+        return $this->belongsToMany(self::class, 'friends', 'sender_id', 'receiver_id')->withPivot('status');
     }
 }
