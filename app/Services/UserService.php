@@ -78,6 +78,20 @@ class UserService
   			);
       }
 	}
+
+	public function updateProfile($requestData) {
+
+		$user  = Auth::user();
+
+		$user->update(['name'=> $requestData->name, 'surname' => $requestData->surname]);
+
+		return [
+			'status' => $this->status_code,
+        	'success' =>	true,
+        	'message' => 'Profile updated Successfully',
+        	'user' => $user,
+		];
+	}
 }
 
 

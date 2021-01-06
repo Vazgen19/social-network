@@ -19,4 +19,5 @@ Route::post('/sign-up', 'UserController@signUp')->name('register');
 Route::middleware('auth:api')->group(function() {
 	Route::post('/logout', 'UserController@logOut')->name('logout');
 	Route::post('/profile', 'UserController@updateProfile')->name('profile.update');
+	Route::get('/friends', 'UserController@friendsList')->name('friends');
 });
