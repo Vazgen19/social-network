@@ -7,7 +7,7 @@ export default class FriendsList extends Component {
 		super(props);
 		this.state = {
 			usersList: [],
-			friendStatuses: ['Approved', 'Pending', 'Rejected']
+			friendStatuses: ['approved', 'pending', 'rejected']
 		}
 	}
 
@@ -27,9 +27,22 @@ export default class FriendsList extends Component {
 
 	unfriendHandler (id) {
 		const token  = localStorage.getItem('token');
+		const headers = { headers: {"Authorization" : `Bearer ${token}`}, data:  {id: id} };
+
+		axios
+		  .delete("http://social.loc/api/friend",  headers)
+		  .then((response) => {
+		  	if (response.data.status === 200) {
+		  		this.setState({usersList: response.data.friends});
+		  	}
+		  })
+	}
+
+	onChangeStatusHandler(id, status) {
+		const token  = localStorage.getItem('token');
 		const headers = { headers: {"Authorization" : `Bearer ${token}`} };
 		axios
-		  .post("http://social.loc/api/unfriend", {id: id}, headers)
+		  .put("http://social.loc/api/friend", {id: id, status: status}, headers)
 		  .then((response) => {
 		  	if (response.data.status === 200) {
 		  		this.setState({usersList: response.data.friends});
@@ -40,6 +53,7 @@ export default class FriendsList extends Component {
 	render(){
 		return (
 			<div>
+				<h1> Friends List</h1>
 				<table className="table">
 					<thead className="thead-dark">
 						<tr>
@@ -55,7 +69,23 @@ export default class FriendsList extends Component {
 					        	<td className="">{item.name} {item.surname}</td>
 					        	<td className="col">{item.email}</td>
 					        	<td className="col">{this.state.friendStatuses[item.pivot.status]}</td>
-					        	<td className="col"><Button className="btn-danger" onClick = {() => this.unfriendHandler(item.id)}>Unfriend</Button></td>
+					        	<td className="col">
+					        		 {item.pivot.status === 1 && (
+									    <React.Fragment>
+										      <Button className="btn-success" onClick = {() => this.onChangeStatusHandler(item.id,this.state.friendStatuses[0])}>Accept</Button>
+										      <Button className="btn-warning" onClick = {() => this.onChangeStatusHandler(item.id,this.state.friendStatuses[2])}>Reject</Button>
+								      	</React.Fragment>
+								      )
+								      }
+								      {item.pivot.status === 2 && (
+									    <React.Fragment>
+										      <Button className="btn-success" onClick = {() => this.onChangeStatusHandler(item.id,this.state.friendStatuses[0])}>Accept</Button>
+										     
+								      	</React.Fragment>
+								      )
+								      }
+					        		<Button className="btn-danger" onClick = {() => this.unfriendHandler(item.id)}>Unfriend</Button>
+					        	</td>
 					        </tr>
 					    ))}
 					</tbody>
