@@ -17,5 +17,5 @@ Route::post('/sign-in', 'UserController@signIn')->name('login');
 Route::post('/sign-up', 'UserController@signUp')->name('register');
 
 Route::middleware('auth:api')->group(function() {
-	Route::get('/home', 'UserController@userDetail')->name('user.detail');
+	Route::post('/logout', 'UserController@logOut')->name('logout');
 });
