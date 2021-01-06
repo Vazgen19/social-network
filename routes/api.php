@@ -20,4 +20,5 @@ Route::middleware('auth:api')->group(function() {
 	Route::post('/logout', 'UserController@logOut')->name('logout');
 	Route::post('/profile', 'UserController@updateProfile')->name('profile.update');
 	Route::get('/friends', 'UserController@friendsList')->name('friends');
+	Route::post('/unfriend', 'UserController@unfriend')->name('unfriend');
 });
