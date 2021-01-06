@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 export default class SignUp extends Component {
 
@@ -16,10 +16,12 @@ export default class SignUp extends Component {
         isLoading: "",
       },
       msg: "",
-    };
+      redirect: false
+    };   
   }
 
   onChangehandler = (e) => {
+    e.preventDefault();
     const { signupData } = this.state;    
     signupData[e.target.name] = e.target.value;
     this.setState({ signupData });
@@ -33,18 +35,8 @@ export default class SignUp extends Component {
       .then((response) => {
         this.setState({ isLoading: false });
         if (response.data.status === 200) {
-          this.setState({
-            msg: response.data.message,
-            signupData: {
-              name: "",
-              surname: "",
-              email: "",
-              password: "",
-            },
-          });
-          setTimeout(() => {
-            this.setState({ msg: "" });
-          }, 2000);
+         this.setState({ redirect: true });
+         return;
         }
 
         if (response.data.status === "failed") {
@@ -53,11 +45,23 @@ export default class SignUp extends Component {
             this.setState({ msg: "" });
           }, 2000);
         }
+      })
+      .final(()=> {
+        this.setState({ isLoading: false });
+        this.setState({msg: "Server not responded"});
       });
   };
   
   render() {
     const isLoading = this.state.isLoading;
+    const redirect = this.state.redirect;
+    const login = localStorage.getItem("isLoggedIn");
+    if (login) {
+      return <Redirect to="/home" />
+    }
+    if(redirect){
+      return <Redirect to = "/sign-in" />
+    }
     return (
       <div className="container card justify-content-center align-items-center">
         <Form className="containers">
@@ -67,6 +71,7 @@ export default class SignUp extends Component {
               type="text"
               name="name"
               placeholder="Enter name"
+              value={this.state.signupData.name}
               onChange={this.onChangehandler}
             />
           </FormGroup>
@@ -76,7 +81,7 @@ export default class SignUp extends Component {
               type="text"
               name="surname"
               placeholder="Enter your surname"
-              defaultValue={this.state.signupData.surname}
+              value={this.state.signupData.surname}
               onChange={this.onChangehandler}
             />
           </FormGroup>
@@ -86,7 +91,7 @@ export default class SignUp extends Component {
               type="email"
               name="email"
               placeholder="Enter email"
-              defaultValue={this.state.signupData.email}
+              value={this.state.signupData.email}
               onChange={this.onChangehandler}
             />
           </FormGroup>          
@@ -96,11 +101,11 @@ export default class SignUp extends Component {
               type="password"
               name="password"
               placeholder="Enter password"
-              defaultValue={this.state.signupData.password}
+              value={this.state.signupData.password}
               onChange={this.onChangehandler}
             />
           </FormGroup>
-          <p className="text-white">{this.state.msg}</p>
+          <p className="text-red">{this.state.msg}</p>
           <Button
             className="text-center mb-4"
             color="success"
