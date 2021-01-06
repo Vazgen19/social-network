@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
+import FriendsList from "./FriendsList";
 
 export default class Profile extends Component {
 
@@ -58,7 +59,7 @@ export default class Profile extends Component {
 	      return <Redirect to="/sign-in" />
 	    }
 		return (
-		  <div className="container card justify-content-center align-items-center">
+		  <div className="container card ">
 		        <Form className="containers">
 		          <FormGroup>
 		            <Label for="name">Name</Label>
@@ -98,6 +99,7 @@ export default class Profile extends Component {
 		            )}
 		          </Button>
 		        </Form>
+		        <FriendsList />
 		  </div>
 		);
 	}
