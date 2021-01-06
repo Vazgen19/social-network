@@ -12,8 +12,6 @@ export default class SignIn extends Component {
       msg: "",
       isLoading: false,
       redirect: false,
-      errMsgEmail: "",
-      errMsgPwd: "",
       errMsg: "",
     };
   }
@@ -36,7 +34,8 @@ export default class SignIn extends Component {
         this.setState({ isLoading: false });
         if (response.data.status === 200) {
             localStorage.setItem("isLoggedIn", true);
-            localStorage.setItem("userData", JSON.stringify(response.data.data));
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("userData", JSON.stringify(response.data.user));
           this.setState({
             msg: response.data.message,
             redirect: true,
