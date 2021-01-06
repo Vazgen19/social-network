@@ -71,4 +71,8 @@ class UserController extends Controller
         return response()->json($userService->unfriend($request));
     }
 
+    public function updateFriend(UserService $userService, Request $request) {    
+        return response()->json($userService->updateFriend($request));
+    }
+
 }

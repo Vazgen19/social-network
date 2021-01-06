@@ -117,6 +117,18 @@ class UserService
 		  ];
 
 	}
+
+	public function updateFriend($requestData) {
+		$user = Auth::user();
+		$user->friends()
+			->updateExistingPivot($requestData->id,['status' => $this->friends_statuses[$requestData->status]]);
+
+		return [
+			'status' => $this->status_code,
+			'friends'=> $user->friends
+		  ];
+
+	}
 }
 
 
