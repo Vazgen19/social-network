@@ -15,7 +15,7 @@ class UserController extends Controller
 
     	$validator              =        Validator::make($request->all(), [
             "email"             =>          "required|email",
-            "password"          =>          "required"
+            "password"          =>          "required|min:8"
         ]);
 
         if($validator->fails()) {
@@ -35,7 +35,7 @@ class UserController extends Controller
             "name"              =>          "required",
             "surname"           =>          "required",
             "email"             =>          "required|email",
-            "password"          =>          "required"
+            "password"          =>          "required|min:8"
         ]);
 
         if($validator->fails()) {
@@ -45,7 +45,8 @@ class UserController extends Controller
         return response()->json($userService->signUp($request));
     }
 
-    public function userDetail(){
-    	dd('wdasdas');
+    public function logOut(Userservice $userService){
+        return response()->json($userService->logout());
     }
+
 }

@@ -15,12 +15,14 @@ class UserService
 		$credentials = $requestData->only('email', 'password');
 		
 		if (Auth::attempt($credentials)) {
-
+			$user = Auth::user();
+			$token = $user->createToken($user->email.'-'.now());					
             return [
             	'status' => $this->status_code,
             	'success' =>	true,
             	'message' => 'You have logged in successfully',
-            	'data' => Auth::user()
+            	'user' => $user,
+            	'token' => $token->accessToken
             ];
         }else {
         	return [
@@ -65,6 +67,16 @@ class UserService
             	'message' => 'Email already registered'
 	  		);
 	  }
+	}
+
+	public function  logout() {
+		if (Auth::user()) {
+	        $token = Auth::user()->token();
+	        $token->revoke();
+	        return array(
+  				'status' => 200
+  			);
+      }
 	}
 }
 
