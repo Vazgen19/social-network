@@ -28,7 +28,6 @@ export default class Profile extends Component {
     	name: this.state.userData.name,
     	surname: this.state.userData.surname
     }
-    console.log(data);
     axios
       .post("http://social.loc/api/profile", data, header)
       .then((response) => {
