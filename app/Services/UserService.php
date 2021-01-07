@@ -132,15 +132,16 @@ class UserService
 	}
 
 	public function searchFriends($requestData){
+			
 		$users = User::where('name', 'like', '%' . $requestData->search . '%')
-			->orWhere('surname','like', '%' . $requestData->search . '%')
-			->orWhere('email','like', '%' . $requestData->search . '%')
-			->get();
+					  ->where('id', '<>', Auth::user()->id)
+					  ->whereNotIn('id',  Auth::user()->friends)
+					  ->get();
 		
 		return [
 			'status' => $this->status_code,
 			'msg' => $users ? 'Search Result': 'Not found user for this keyword', 
-			'users'=> $users,
+			'users'=> $users
 		]; 
 
 	}

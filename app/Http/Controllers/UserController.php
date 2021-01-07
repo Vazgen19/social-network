@@ -76,7 +76,16 @@ class UserController extends Controller
     }
 
     public function searchFriends(UserService $userService, Request $request) {
-      return response()->json($userService->searchFriends($request));
+
+        $validator              =        Validator::make($request->all(), [
+            "search"              =>          "required"
+        ]);
+
+        if($validator->fails()) {
+            return response()->json(["status" => "failed", "message" => "validation_error", "errors" => $validator->errors()]);
+        }
+
+        return response()->json($userService->searchFriends($request));
     }
 
 }
