@@ -22,5 +22,6 @@ Route::middleware('auth:api')->group(function() {
 	Route::get('/friends', 'UserController@friendsList')->name('friends');
 	Route::put('/friend', 'UserController@updateFriend')->name('friend.update');
 	Route::delete('/friend', 'UserController@unfriend')->name('friend.delete');
+	Route::post('/friend', 'UserController@friendRequest')->name('friend.request');
 	Route::post('/find-friend', 'UserController@searchFriends')->name('friend.search');
 });
