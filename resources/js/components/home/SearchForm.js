@@ -8,7 +8,7 @@ export default class SearchForm extends Component {
 	render(){
 		return(
 			<div className="mb-5 mt-5 justify-content-center align-items-center">
-		        <Form className="d-flex containers align-items-center justify-content-between" inline>
+		        <Form>
 		          <FormGroup>
 		            <Input
 		              type="text"
@@ -17,7 +17,8 @@ export default class SearchForm extends Component {
 		              defaultValue={this.props.search}
 		              onChange={this.props.changeHandler}
 		            />
-		          </FormGroup>		          
+		          </FormGroup>
+				  <p className="text-danger">{this.props.errMsg}</p>		          
 		          <Button
 		            className="text-center mb-0"
 		            color="success"
