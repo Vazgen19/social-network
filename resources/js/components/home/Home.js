@@ -15,6 +15,7 @@ export default class Home extends Component {
 			msg: "",
 			isLoading: false,
 			errMsg: "",
+			requestIds: []
 		};
 	}
 
@@ -39,7 +40,7 @@ export default class Home extends Component {
 				this.setState({
 					isLoading: false,
 					users: response.data.users,
-					msg: response.data.message
+					msg: response.data.msg
 				})
 			}
 			if (response.data.status === "failed") {
@@ -56,8 +57,20 @@ export default class Home extends Component {
 		)
 	}
 
-	sendFriendResquestHandler = (id) => {
-
+	sendFriendRequestHandler = (id) => {
+		this.setState({ isLoading: true });
+		const token  = localStorage.getItem('token');
+		const header = { headers: {"Authorization" : `Bearer ${token}`} };
+		axios
+		.post("http://social.loc/api/friend", {id: id}, header)
+		.then((response) => {
+			this.setState({ isLoading: false });
+			if (response.data.status === 200) {
+				let requestIds = this.state.requestIds;
+				requestIds.push(response.data.id);
+				this.setState({requestIds: requestIds});
+			}
+		});
 	}
 
 	render(){
@@ -72,12 +85,16 @@ export default class Home extends Component {
 				<SearchForm 
 				isLoading = {this.state.isLoading}
 				errMsg = {this.state.errMsg}
-				search = {this.state.search}
+				search = {this.state.search}				
 				searchHandler = {this.searchHandler} 
 				changeHandler = {this.onChangeHandler}  />
+				<h1>{this.state.msg}</h1>
 				
 				{ this.state.users.length > 0 && (
-					<SearchResult message = {this.state.msg} users = {this.state.users} sendFriendResquestHandler = {this.sendFriendResquestHandler}  />
+					<SearchResult 
+					 users = {this.state.users}
+					 requestIds = {this.state.requestIds}
+					 sendFriendRequestHandler = {this.sendFriendRequestHandler}  />
 				) }
 
 			</div>

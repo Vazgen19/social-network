@@ -3,14 +3,17 @@ import { Button } from 'reactstrap';
 
 export default class SearchResult extends Component {
     
-    componentDidMount(){
+    componentWillMount(){
         console.log(this.props);
     }
 
-    render(){
+    checkButton  = (id) => {     
+       return  this.props.requestIds.includes(id);
+    }
+
+    render(){        
         return (
-			<div>
-				<h1>{this.props.message}</h1>
+			<div>				
 				<table className="table">
 					<thead className="thead-dark">
 						<tr>
@@ -25,14 +28,15 @@ export default class SearchResult extends Component {
 					        	<td className="">{item.name} {item.surname}</td>
 					        	<td className="">{item.email}</td>
 					        	<td className="">
-					        		<Button className="btn-success" onClick = {() => this.props.sendFriendResquestHandler(item.id)}>Send Friend Request</Button>
+					        		<Button disabled = {this.checkButton(item.id)} className="btn-success" onClick = {() => this.props.sendFriendRequestHandler(item.id)}>
+                                        { this.checkButton(item.id) ? 'Request Sended': 'Send Friend Request' }
+                                    </Button>
 					        	</td>
 					        </tr>
 					    ))}
 					</tbody>
 				</table>
 			</div>
-
 		);
     }
 }
