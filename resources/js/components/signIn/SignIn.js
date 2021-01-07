@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import withDataContext from '../../context/consumers/DataConsumer';
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import axios from "axios";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
-export default class SignIn extends Component {
+class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,6 +16,7 @@ export default class SignIn extends Component {
       errMsg: "",
     };
   }
+  
   onChangehandler = (e) => {
     let name = e.target.name;
     let value = e.target.value;
@@ -36,6 +38,7 @@ export default class SignIn extends Component {
             localStorage.setItem("isLoggedIn", true);
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("userData", JSON.stringify(response.data.user));
+            this.props.toggleLogedIn(true);
           this.setState({
             msg: response.data.message,
             redirect: true,
@@ -105,7 +108,8 @@ export default class SignIn extends Component {
             <span className="text-danger">{this.state.errMsgPwd}</span>
           </FormGroup>
           <p className="text-danger">{this.state.errMsg}</p>
-          <Button
+        
+            <Button
             className="text-center mb-4"
             color="success"
             onClick={this.onSignInHandler}
@@ -121,8 +125,11 @@ export default class SignIn extends Component {
               <span></span>
             )}
           </Button>
+          <Link className="text-center mb-4 ml-4" to = "/sign-up">Create Account</Link>
         </Form>
       </div>
     );
   }
 }
+
+export default withDataContext(SignIn, ['toggleLogedIn'])
