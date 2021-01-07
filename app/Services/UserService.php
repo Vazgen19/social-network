@@ -139,7 +139,7 @@ class UserService
 		
 		return [
 			'status' => $this->status_code,
-			'msg' => $users ? 'Search Result for '.$requestData->search : 'Not found user for this keyword', 
+			'msg' => $users ? 'Search Result': 'Not found user for this keyword', 
 			'users'=> $users,
 		]; 
 
