@@ -127,7 +127,21 @@ class UserService
 		return [
 			'status' => $this->status_code,
 			'friends'=> array_merge($user->friends->toArray(), $user->friendsOf->toArray()),
-		  ];
+		 ];
+
+	}
+
+	public function searchFriends($requestData){
+		$users = User::where('name', 'like', '%' . $requestData->search . '%')
+			->orWhere('surname','like', '%' . $requestData->search . '%')
+			->orWhere('email','like', '%' . $requestData->search . '%')
+			->get();
+		
+		return [
+			'status' => $this->status_code,
+			'msg' => $users ? 'Search Result for '.$requestData->search : 'Not found user for this keyword', 
+			'users'=> $users,
+		]; 
 
 	}
 }
