@@ -51,6 +51,7 @@ export default class FriendsList extends Component {
 	}
 
 	render(){
+		const userId = JSON.parse(localStorage.getItem('userData')).id;
 		return (
 			<div>
 				<h1> Friends List</h1>
@@ -64,13 +65,13 @@ export default class FriendsList extends Component {
 						</tr>
 					</thead>
 					<tbody>
-						{ this.state.usersList.map((item, index) => (
+						{ this.state.usersList.map((item, index) => (							
 					        <tr key={index}>
 					        	<td className="">{item.name} {item.surname}</td>
 					        	<td className="col">{item.email}</td>
 					        	<td className="col">{this.state.friendStatuses[item.pivot.status]}</td>
 					        	<td className="col">
-					        		 {item.pivot.status === 1 && (
+					        		 {item.pivot.status === 1 && userId === item.pivot.receiver_id && (
 									    <React.Fragment>
 										      <Button className="btn-success" onClick = {() => this.onChangeStatusHandler(item.id,this.state.friendStatuses[0])}>Accept</Button>
 										      <Button className="btn-warning" onClick = {() => this.onChangeStatusHandler(item.id,this.state.friendStatuses[2])}>Reject</Button>
