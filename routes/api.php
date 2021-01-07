@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/sign-in', 'UserController@signIn')->name('login');
-Route::post('/sign-up', 'UserController@signUp')->name('register');
+Route::post('/sign-in', 'AuthController@signIn')->name('login');
+Route::post('/sign-up', 'AuthController@signUp')->name('register');
 
 Route::middleware('auth:api')->group(function() {
-	Route::post('/logout', 'UserController@logOut')->name('logout');
+	Route::post('/logout', 'AuthController@logOut')->name('logout');
 	Route::post('/profile', 'UserController@updateProfile')->name('profile.update');
 	Route::get('/friends', 'UserController@friendsList')->name('friends');
 	Route::put('/friend', 'UserController@updateFriend')->name('friend.update');
