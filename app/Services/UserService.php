@@ -4,6 +4,8 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Friend;
+
 
 class UserService
 {
@@ -61,18 +63,43 @@ class UserService
 	}
 
 	public function searchFriends($requestData){
-			
+		$excludedIds = array_merge(Auth::user()->friends->pluck('id')->toArray(), Auth::user()->friendsOf->pluck('id')->toArray());			
 		$users = User::where('name', 'like', '%' . $requestData->search . '%')
 					  ->where('id', '<>', Auth::user()->id)
-					  ->whereNotIn('id',  Auth::user()->friends)
+					  ->whereNotIn('id',  $excludedIds)
 					  ->get();
 		
 		return [
 			'status' => $this->status_code,
-			'msg' => $users ? 'Search Result': 'Not found user for this keyword', 
+			'msg' => !empty($users) ? 'Search Result': 'Not found user for this keyword', 
 			'users'=> $users
 		]; 
+	}
 
+	public function friendRequest($requestData){
+		$sender_id = Auth::user()->id;
+		$data = [
+			'sender_id' => $sender_id,
+			'receiver_id' => $requestData->id,
+			'status' => $this->friends_statuses['pending']
+		];
+		$exists = Friend::where('sender_id', $sender_id)
+							->where('receiver_id', $requestData->id)
+							->first();
+		if(is_null($exists)){
+			if(Friend::create($data)){
+				return [
+					"status" => $this->status_code,
+					'id' => $requestData->id
+				];
+			}	
+		}else{
+			return [
+				"status" => 'failed',
+				'message' => "Friend Request already send"
+			];
+		}
+		
 	}
 }
 
