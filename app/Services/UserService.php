@@ -103,29 +103,30 @@ class UserService
 		  $user = Auth::user();
 		  return [
 			'status' => $this->status_code,
-			'friends'=> $user->friends
+			'friends'=> array_merge($user->friends->toArray(), $user->friendsOf->toArray()),
 		  ];
 	}
 
 	public function unfriend($requestData) {
 		$user = Auth::user();
 		$user->friends()->detach($requestData->id);
+		$user->friendsOf()->detach($requestData->id);
 
 		return [
 			'status' => $this->status_code,
-			'friends'=> $user->friends
+			'friends'=> array_merge($user->friends->toArray(), $user->friendsOf->toArray()),
 		  ];
 
 	}
 
 	public function updateFriend($requestData) {
 		$user = Auth::user();
-		$user->friends()
+		$user->friendsOf()
 			->updateExistingPivot($requestData->id,['status' => $this->friends_statuses[$requestData->status]]);
 
 		return [
 			'status' => $this->status_code,
-			'friends'=> $user->friends
+			'friends'=> array_merge($user->friends->toArray(), $user->friendsOf->toArray()),
 		  ];
 
 	}
